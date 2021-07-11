@@ -28,7 +28,6 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        //$paginator = BlogCategory::paginate(10);
         $paginator = $this->blogCategoryRepositories->getAllWithPaginate(5);
 
         return view('blog.admin.categories.index', compact('paginator'));
@@ -61,8 +60,10 @@ class CategoryController extends BaseController
             $data['slug'] = Str::slug($data['title']);
         }
 
-        $item = new BlogCategory($data);
-        $item->save();
+//        $item = new BlogCategory($data);
+//        $item->save();
+
+        $item = (new BlogCategory())->create($data);
 
         if ($item) {
             return redirect()->route('blog.admin.categories.edit', [$item->id])
@@ -79,13 +80,13 @@ class CategoryController extends BaseController
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(int $id, BlogCategoryRepositories $categoryRepositories)
+    public function edit(int $id)
     {
-        $item = $categoryRepositories->getEdit($id);
+        $item = $this->blogCategoryRepositories->getEdit($id);
         if($item === null) {
             abort(404);
         }
-        $categoryList = $categoryRepositories->getForComboBox();
+        $categoryList = $this->blogCategoryRepositories->getForComboBox();
 
         return view('blog.admin.categories.edit',
             compact('item', 'categoryList'));
@@ -101,8 +102,8 @@ class CategoryController extends BaseController
      */
     public function update(BlogCategoryUpdateRequest $request, int $id): \Illuminate\Http\RedirectResponse
     {
+        $item = $this->blogCategoryRepositories->getEdit($id);
 
-        $item = BlogCategory::find($id);
         if (empty($item)) {
             return back()
                 ->withErrors(['msg' => "Запись id[{$id}} не найдена"])

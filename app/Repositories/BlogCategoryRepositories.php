@@ -43,7 +43,6 @@ class BlogCategoryRepositories extends CoreRepository
 
     public function getForComboBox()
     {
-//        return $this->startConditions()->all();
         $columns = implode(', ', [
             'id',
             'CONCAT (id, ". ", title) as id_title',
@@ -63,9 +62,6 @@ class BlogCategoryRepositories extends CoreRepository
             ->selectRaw($columns)
             ->toBase()
             ->get();
-
-//        dd($result);
-
 
         return $result;
 
