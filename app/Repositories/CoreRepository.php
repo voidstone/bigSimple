@@ -32,13 +32,15 @@ abstract class CoreRepository
     /**
      * @return mixed
      */
+
     abstract protected function getModelClass();
 
 
     /**
      * @return \Illuminate\Contracts\Foundation\Application|mixed
      */
-    protected function startConditions() {
+    protected function startConditions()
+    {
         return clone $this->model;
     }
 
