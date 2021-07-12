@@ -52,4 +52,32 @@ class BlogPostRepositories extends CoreRepository
         return $result;
     }
 
+
+    /**
+     * @param $id
+     * @return Model
+     */
+    public function getEdit($id): Model
+    {
+        return $this->startConditions()->find($id);
+    }
+
+
+    public function getForComboBox()
+    {
+        $columns = implode(', ', [
+            'id',
+            'CONCAT (id, ". ", title) as id_title',
+        ]);
+
+        $result = $this
+            ->startConditions()
+            ->selectRaw($columns)
+            ->toBase()
+            ->get();
+
+        return $result;
+
+    }
+
 }

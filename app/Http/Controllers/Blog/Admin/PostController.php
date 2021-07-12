@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blog\Admin;
 
+use App\Repositories\BlogCategoryRepositories;
 use App\Repositories\BlogPostRepositories;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
@@ -10,6 +11,12 @@ class PostController extends BaseController
 {
     /**
      * @var BlogPostRepositories
+     */
+    private $blogPostRepository;
+
+
+    /**
+     * @var BlogCategoryRepositories
      */
     private $blogCategoryRepository;
 
@@ -20,7 +27,8 @@ class PostController extends BaseController
     public function __construct()
     {
         parent::__construct();
-        $this->blogCategoryRepository = app(BlogPostRepositories::class);
+        $this->blogPostRepository = app(BlogPostRepositories::class);
+        $this->blogCategoryRepository = app(BlogCategoryRepositories::class);
     }
 
 
@@ -31,7 +39,7 @@ class PostController extends BaseController
      */
     public function index()
     {
-        $paginator = $this->blogCategoryRepository->getAllWithPaginate();
+        $paginator = $this->blogPostRepository->getAllWithPaginate();
 
         return view('blog.admin.posts.index', compact('paginator'));
     }
@@ -49,7 +57,7 @@ class PostController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -60,18 +68,26 @@ class PostController extends BaseController
     /**
      * Show the form for editing the specified resource.
      *
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        dd(__Method__, $id);
+        $item = $this->blogPostRepository->getEdit($id);
+        if (empty($item)) {
+            abort(404);
+        }
+
+        $categoryList = $this->blogPostRepository->getForComboBox();
+
+        return view('blog.admin.posts.edit', compact('item', 'categoryList'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -82,7 +98,7 @@ class PostController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
