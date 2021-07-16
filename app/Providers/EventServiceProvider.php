@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\BlogCategory;
+use App\Models\BlogPost;
+use App\Observers\BlogCategoryObserver;
+use App\Observers\BlogPostObserver;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -29,6 +33,7 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        //
+        BlogPost::observe(BlogPostObserver::class);
+        BlogCategory::observe(BlogCategoryObserver::class);
     }
 }
