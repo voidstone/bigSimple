@@ -17,13 +17,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class BlogCategory extends Model
 {
     use SoftDeletes;
-    const ROOT = 1;
+    public const ROOT = 1;
 
     protected $fillable = [
         'title', 'slug', 'parent_id', 'description'
     ];
 
-    public function parentCategory() {
+    public function parentCategory(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
         return $this->belongsTo(BlogCategory::class, 'parent_id', 'id');
     }
 
@@ -34,7 +35,18 @@ class BlogCategory extends Model
         return $title;
     }
 
-    public function isRoot() {
+    public function isRoot(): bool
+    {
         return $this->id === BlogCategory::ROOT;
     }
+
+    //Accessors
+//    public function getTitleAttribute($valueFromObject) {
+//        return mb_strtoupper($valueFromObject);
+//    }
+
+    //Mutators
+//    public function setTitleAttribute($value) {
+//        $this->attributes['title'] = mb_strtolower($value);
+//    }
 }

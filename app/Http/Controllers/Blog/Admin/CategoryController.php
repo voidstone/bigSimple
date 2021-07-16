@@ -77,6 +77,20 @@ class CategoryController extends BaseController
     public function edit(int $id)
     {
         $item = $this->blogCategoryRepositories->getEdit($id);
+
+//        $v['title_before'] = $item->title;
+//
+//        $item->title = 'Fsasdfsdfsdf';
+//
+//        $v['title_after'] = $item->title;
+//        $v['getAttribute'] = $item->getAttribute('title');
+//        $v['attributeToArray'] = $item->attributesToArray();
+//        $v['getMutatorsAttribute'] = $item->getMutatedAttributes();
+//
+//
+//        dd($v, $item);
+
+
         if($item === null) {
             abort(404);
         }

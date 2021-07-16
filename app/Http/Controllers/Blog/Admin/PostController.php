@@ -117,12 +117,6 @@ class PostController extends BaseController
 
         $data = $request->all();
 
-//        if(empty($data['slug'])) {
-//            $data['slug'] = \Str::slug($data['title']);
-//        }
-//        if(empty($item->published_at) && $data['is_published']) {
-//            $data['published_at'] = Carbon::now();
-//        }
 
         $result = $item->update($data);
 
@@ -145,6 +139,18 @@ class PostController extends BaseController
      */
     public function destroy($id)
     {
-        dd(__Method__,  $id , \request()->all());
+       $result = BlogPost::destroy($id);
+
+       //полное удаление
+//        $result = BlogPost::find($id)->forceDelete();
+
+        if($result) {
+            return redirect()
+                ->route('blog.admin.posts.index')
+                ->with(['success' => 'Запись id[$id] удалена']);
+        } else {
+            return back()
+                ->withErrors(['msg' => 'Ошибка удаления']);
+        }
     }
 }
