@@ -79,6 +79,7 @@ class BlogCategoryRepositories extends CoreRepository
         $result = $this
             ->startConditions()
             ->select($columns)
+            ->with(['parentCategory:id,title']) //уменьшить количество обращений к базе
             ->paginate($perPage);
 
         return $result;
