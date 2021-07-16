@@ -35,7 +35,6 @@ class BlogPost extends Model
         'category_id',
         'is_published',
         'published_at',
-        'user_id'
     ];
 
     /**
