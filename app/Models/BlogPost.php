@@ -24,6 +24,8 @@ class BlogPost extends Model
 {
     use SoftDeletes;
 
+
+    public const UNKNOWN_USER = 1;
     /**
      * @var string[]
      */
@@ -35,6 +37,7 @@ class BlogPost extends Model
         'category_id',
         'is_published',
         'published_at',
+        'user_id',
     ];
 
     /**

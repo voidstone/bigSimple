@@ -18,6 +18,10 @@ class BlogPostObserver
         $this->setPublishedAt($blogPost);
 
         $this->setSlug($blogPost);
+
+        $this->setHtml($blogPost);
+
+        $this->setUser($blogPost);
     }
     /**
      * Handle the blog post "created" event.
@@ -105,5 +109,17 @@ class BlogPostObserver
         if(empty($blogPost->slug)) {
             $blogPost->slug = \Str::slug($blogPost->title);
         }
+    }
+
+    protected function setHtml(BlogPost $blogPost) {
+
+        if($blogPost->isDirty('content_raw')) {
+            //TODO тут должна быть генерация markdown -> html
+            $blogPost->content_html = $blogPost->content_raw;
+        }
+    }
+
+    protected function setUser(BlogPost $blogPost) {
+        $blogPost->user_id = auth()->id ?? BlogPost::UNKNOWN_USER;
     }
 }
