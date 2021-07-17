@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\GenerateCatalog\GenerateCatalogMainJob;
 use App\Models\BlogPost;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -103,5 +104,12 @@ class DiggingDeeperController extends Controller
 
         dd(compact('sortedSimpleCollection','sortedAscCollection','sortedDescCollection'));
 
+    }
+
+    //
+    //запустить цепочку jobs
+    //php artisan queue:listen --queue=generate-catalog --tries=3 --delay=10
+    public function prepareCatalog() {
+        GenerateCatalogMainJob::dispatch();
     }
 }
