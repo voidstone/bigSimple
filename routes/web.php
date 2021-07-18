@@ -8,26 +8,26 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 //Route::get('/collections', 'DiggingDeeperController@collections')->name('collections');
 
 
 
 
 Route::group(['prefix' =>'digging_deeper'], function () {
-    Route::get('collections', 'DiggingDeeperController@collections')
+    Route::get('collections', [App\Http\Controllers\DiggingDeeperController::class, 'collections'])
         ->name('digging_deeper.collections');
 
-    Route::get('prepare-catalog','DiggingDeeperController@prepareCatalog')
+    Route::get('prepare-catalog',[App\Http\Controllers\DiggingDeeperController::class, 'prepareCatalog'])
         ->name('digging_deeper.prepareCatalog');
 });
 
-Route::group(['namespace' => 'Blog', 'prefix' => 'blog'], function () {
-    Route::resource('posts', 'PostController')->names('blog.posts');
+Route::group(['namespace' => 'App\Http\Controllers\Blog', 'prefix' => 'blog'], function () {
+    Route::resource('posts','PostController')->names('blog.posts');
 });
 
 $groupData = [
-    'namespace' => 'Blog\Admin',
+    'namespace' => 'App\Http\Controllers\Blog\Admin',
     'prefix' => 'admin/blog',
 ];
 

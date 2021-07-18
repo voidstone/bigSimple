@@ -60,7 +60,7 @@ class PostController extends BaseController
         $categoryList = $this->blogPostRepository->getForComboBox();
 
         return view('blog.admin.posts.edit',
-                compact('item', 'categoryList'));
+            compact('item', 'categoryList'));
     }
 
     /**
@@ -74,7 +74,7 @@ class PostController extends BaseController
         $data = $request->input();
         $item = (new BlogPost())->create($data);
 
-        if($item) {
+        if ($item) {
             $job = new BlogPostAfterCreateJob($item);
             $this->dispatch($job);
 
@@ -126,7 +126,7 @@ class PostController extends BaseController
 
         $result = $item->update($data);
 
-        if($result) {
+        if ($result) {
             return redirect()
                 ->route('blog.admin.posts.edit', $item->id)
                 ->with(['success' => 'Успешно сохранено']);
@@ -145,12 +145,12 @@ class PostController extends BaseController
      */
     public function destroy($id)
     {
-       $result = BlogPost::destroy($id);
+        $result = BlogPost::destroy($id);
 
-       //полное удаление
+        //полное удаление
 //        $result = BlogPost::find($id)->forceDelete();
 
-        if($result) {
+        if ($result) {
 
             BlogPostAfterDeleteJob::dispatch($id)->delay(10);
 
